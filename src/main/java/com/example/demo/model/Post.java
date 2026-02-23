@@ -10,6 +10,7 @@ public class Post {
     public Post(String text, Date creationDate){
         this.text = text;
         this.creationDate = creationDate;
+        this.likes = 0;
     }
 
     public String getText(){

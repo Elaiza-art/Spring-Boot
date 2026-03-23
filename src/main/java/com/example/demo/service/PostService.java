@@ -1,51 +1,57 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Post;
+import com.example.demo.repository.PostRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Service
 public class PostService {
+//    private LinkedList<Post> posts = new LinkedList<>();
 
-    private LinkedList<Post> posts = new LinkedList<>();
+//    public PostService(){
+//        posts.add(new Post("Мы часто ждем идеального момента: понедельника, первого числа, нового года. Но жизнь происходит здесь и сейчас.\n" +
+//                "Вчера я понял(а) одну важную вещь: страх уходит ровно в тот момент, когда ты делаешь первый шаг. Даже маленький. Даже неуверенный.\n" +
+//                "Поэтому сегодня я выбираю действовать. А вы?", new Date(120,0,5),Long.valueOf(posts.size())));
+//        posts.add(new Post("Многие думают, что для результата нужно работать 24/7 и выкладываться на 200%. Но на самом деле ключ к успеху — это система и отдых.\n" +
+//                "\uD83D\uDD25 3 простых совета, которые работают лучше, чем зубрежка:\n" +
+//                "\n" +
+//                "- Делать перерывы каждые 45 минут.\n" +
+//                "\n" +
+//                "- Записывать идеи, даже бредовые.\n" +
+//                "\n" +
+//                "- Высыпаться.\n" +
+//                "Каким правилом пользуетесь вы? Делитесь в комментариях \uD83D\uDC47", new Date(123, 4, 22),Long.valueOf(posts.size())));
+//        posts.add(new Post("План на сегодня:\n" +
+//                "\n" +
+//                "1. Проснуться и сделать зарядку.\n" +
+//                "\n" +
+//                "2. Съесть что-то полезное на завтрак.\n" +
+//                "\n" +
+//                "3. Свернуть горы.\n" +
+//                "Реальность:\n" +
+//                "\uD83D\uDE34 Проснулась, но котик не пускает.\n" +
+//                "\uD83C\uDF69 На завтрак печенька (она же полезная, потому что поднять настроение — это полезно).\n" +
+//                "\uD83C\uDFD4\uFE0F Горы подождут, сегодня я сворачиваю диван.\n" +
+//                "Как проходит ваше утро? Делитесь, чтобы я не одна тут \"фея\" была))", new Date(126, 2, 10),Long.valueOf(posts.size())));
+//    }
 
-    public PostService(){
-        posts.add(new Post("Мы часто ждем идеального момента: понедельника, первого числа, нового года. Но жизнь происходит здесь и сейчас.\n" +
-                "Вчера я понял(а) одну важную вещь: страх уходит ровно в тот момент, когда ты делаешь первый шаг. Даже маленький. Даже неуверенный.\n" +
-                "Поэтому сегодня я выбираю действовать. А вы?", new Date(120,0,5),Long.valueOf(posts.size())));
-        posts.add(new Post("Многие думают, что для результата нужно работать 24/7 и выкладываться на 200%. Но на самом деле ключ к успеху — это система и отдых.\n" +
-                "\uD83D\uDD25 3 простых совета, которые работают лучше, чем зубрежка:\n" +
-                "\n" +
-                "- Делать перерывы каждые 45 минут.\n" +
-                "\n" +
-                "- Записывать идеи, даже бредовые.\n" +
-                "\n" +
-                "- Высыпаться.\n" +
-                "Каким правилом пользуетесь вы? Делитесь в комментариях \uD83D\uDC47", new Date(123, 4, 22),Long.valueOf(posts.size())));
-        posts.add(new Post("План на сегодня:\n" +
-                "\n" +
-                "1. Проснуться и сделать зарядку.\n" +
-                "\n" +
-                "2. Съесть что-то полезное на завтрак.\n" +
-                "\n" +
-                "3. Свернуть горы.\n" +
-                "Реальность:\n" +
-                "\uD83D\uDE34 Проснулась, но котик не пускает.\n" +
-                "\uD83C\uDF69 На завтрак печенька (она же полезная, потому что поднять настроение — это полезно).\n" +
-                "\uD83C\uDFD4\uFE0F Горы подождут, сегодня я сворачиваю диван.\n" +
-                "Как проходит ваше утро? Делитесь, чтобы я не одна тут \"фея\" была))", new Date(126, 2, 10),Long.valueOf(posts.size())));
-    }
-
-    public void create(String text) {
-        Long nextId = (long) posts.size();
-        posts.add(new Post(text, new Date(),Long.valueOf(nextId)));
-    }
+    @Autowired
+    PostRepository postRepository;
 
     public List<Post> listAllPosts(){
-        return posts;
+        return StreamSupport.stream(postRepository.findAll().spliterator(), false).toList();
     }
 
+    public void create(final String text) {
+//        Long nextId = (long) posts.size();
+//        posts.add(new Post(text, new Date(),Long.valueOf(nextId)));
+        Post post = new Post(null, text, new Date());
+        postRepository.save(post);
+    }
 }
